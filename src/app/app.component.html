@@ -1,11 +1,12 @@
 <main>
-  <h1>Zoom Meeting SDK Sample Angular</h1>
+  <h3>Home</h3>
 
   <!-- For Component View -->
   <div id="meetingSDKElement">
     <!-- Zoom Meeting SDK Component View Rendered Here -->
   </div>
+  <app-analog-clock></app-analog-clock>
 
-
-  <button (click)="getSignature()">Join Meeting</button>
+  
+  <button *ngFor="let meeting of meetings" (click)="getSignature()">Join {{meeting.topic}}</button>
 </main>

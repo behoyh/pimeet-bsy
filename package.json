@@ -1,8 +1,8 @@
 {
   "name": "meetingsdk-sample-angular",
-  "version": "2.12.0",
+  "version": "2.13.0",
   "author": "Zoom Video Communications, Inc.",
-    "main": "app.js",
+  "main": "app.js",
   "contributors": [
     {
       "name": "Tommy Gaessler"
@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "ng": "ng",
-    "start": "ng build --base-href ./ && electron .",
+    "start": "ng build --watch --base-href ./ & electron . --enable-gpu-rasterization --enable-oop-rasterization --enable-accelerated-video-decode --ignore-gpu-blocklist --start-fullscreen --disable-session-crashed-bubble --args --disable-web-security --user-data-dir",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -26,8 +26,9 @@
     "@angular/platform-browser": "~13.1.0",
     "@angular/platform-browser-dynamic": "~13.1.0",
     "@angular/router": "~13.1.0",
-    "@zoomus/websdk": "^2.12.0",
-    "rxjs": "~6.6.0",
+    "@zoomus/websdk": "^2.13.0",
+    "electron-reload": "^2.0.0-alpha.1",
+    "rxjs": "7.8.1",
     "tslib": "^2.0.3",
     "zone.js": "~0.11.4"
   },

@@ -3,8 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { DOCUMENT } from '@angular/common';
 
 import { ZoomMtg } from '@zoomus/websdk';
+import { MeetingInfo } from '@zoomus/websdk/embedded';
 
-ZoomMtg.setZoomJSLib('https://source.zoom.us/2.12.0/lib', '/av');
+ZoomMtg.setZoomJSLib('https://source.zoom.us/2.13.0/lib', '/av');
 
 ZoomMtg.preLoadWasm();
 ZoomMtg.prepareWebSDK();
@@ -21,21 +22,36 @@ export class AppComponent implements OnInit {
 
   authEndpoint = 'https://pizookie.herokuapp.com/'
   sdkKey = 'Uaty1iKCQAyoJElAMLZhRQ'
-  meetingNumber = '123456789'
-  passWord = ''
+  meetingNumber = '9710749598'
+  passWord = 'aw4cjK'
   role = 0
-  userName = 'Angular'
+  userName = 'beshoy'
   userEmail = ''
   registrantToken = ''
   zakToken = ''
   leaveUrl = 'http://localhost:4200'
+
+  meetings = []
 
   constructor(public httpClient: HttpClient, @Inject(DOCUMENT) document) {
 
   }
 
   ngOnInit() {
+    this.getCalendar()
+  }
 
+  getCalendar() {
+    debugger;
+    this.httpClient.get("http://localhost:4000/meetings").toPromise().then((data: any) => { 
+      debugger;
+      for (var meeting in data.meetings) {
+        debugger;
+        this.meetings.push(meeting)
+        this.getSignature()
+        //if meeting.
+      }
+    },() => alert("please visit localhost:4000 to authenticate."));
   }
 
   getSignature() {
