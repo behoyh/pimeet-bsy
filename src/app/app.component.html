@@ -7,6 +7,22 @@
   </div>
   <app-analog-clock></app-analog-clock>
 
-  
-  <button *ngFor="let meeting of meetings" (click)="getSignature()">Join {{meeting.topic}}</button>
+  <div class="count-down-timer">
+    <p>Joining Meeting</p>
+    <div class="wrapper">
+      <div class="description">
+        <p>Minutes</p>
+        <p>Seconds</p>
+      </div>
+      <div class="times">
+        <p #minutes></p>
+        <p #seconds></p>
+      </div>
+    </div>
+  </div>
+
+  <div *ngFor="let m of meetings">
+    {{m.topic}} - {{m.start_time}}
+    <button (click)="getSignature()">Join {{m.id}}</button>
+  </div>
 </main>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ElementRef, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DOCUMENT } from '@angular/common';
 
@@ -20,10 +20,12 @@ ZoomMtg.i18n.reload('en-US');
 })
 export class AppComponent implements OnInit {
 
+  meetings = [];
+
   authEndpoint = 'https://pizookie.herokuapp.com/'
   sdkKey = 'Uaty1iKCQAyoJElAMLZhRQ'
-  meetingNumber = '9710749598'
-  passWord = 'aw4cjK'
+  meetingNumber = '99878568299'
+  passWord = 'MWUzaWhJKzZFbEdUWVFrWVpsNEFTUT09'
   role = 0
   userName = 'beshoy'
   userEmail = ''
@@ -31,24 +33,22 @@ export class AppComponent implements OnInit {
   zakToken = ''
   leaveUrl = 'http://localhost:4200'
 
-  meetings = []
-
   constructor(public httpClient: HttpClient, @Inject(DOCUMENT) document) {
 
   }
 
   ngOnInit() {
-    this.getCalendar()
+    this.getCalendar();
   }
 
   getCalendar() {
     debugger;
     this.httpClient.get("http://localhost:4000/meetings").toPromise().then((data: any) => { 
       debugger;
-      for (var meeting in data.meetings) {
+      for (var i in data.meetings) {
         debugger;
-        this.meetings.push(meeting)
-        this.getSignature()
+        this.meetings.push(data.meetings[i]);
+        //this.getSignature()
         //if meeting.
       }
     },() => alert("please visit localhost:4000 to authenticate."));
@@ -99,5 +99,29 @@ export class AppComponent implements OnInit {
         console.log(error)
       }
     })
+  }
+
+  date: any;
+  now: any;
+  targetDate: any = new Date();
+  targetTime: any = this.targetDate.getTime();
+  difference: number;
+
+  @ViewChild('minutes', { static: true }) minutes: ElementRef;
+  @ViewChild('seconds', { static: true }) seconds: ElementRef;
+
+  ngAfterViewInit() {
+    setInterval(() => {
+      this.tickTock();
+      this.difference = this.targetTime - this.now;
+      this.difference = this.difference / (1000 * 60 * 60 * 24);
+    }, 1000);
+  }
+
+  tickTock() {
+    this.date = new Date();
+    this.now = this.date.getTime();
+    this.minutes.nativeElement.innerText = this.date.getMinutes() - 9;
+    this.seconds.nativeElement.innerText = 60 - this.date.getSeconds();
   }
 }

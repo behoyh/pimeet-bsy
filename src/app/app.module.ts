@@ -4,16 +4,19 @@ import { HttpClientModule } from '@angular/common/http';
 import { AnalogClockComponent } from './analog-clock/analog-clock.component';
 import { HandArrowComponent } from './analog-clock/hand-arrow/hand-arrow.component';
 import { AppComponent } from './app.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AnalogClockComponent,
     HandArrowComponent,
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
