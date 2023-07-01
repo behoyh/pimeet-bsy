@@ -187,6 +187,7 @@ class AppComponent {
     }
     getCalendar() {
         debugger;
+        this.meetings.push("data.meetings[i]");
         this.httpClient.get("http://localhost:4000/meetings").toPromise().then((data) => {
             debugger;
             for (var i in data.meetings) {

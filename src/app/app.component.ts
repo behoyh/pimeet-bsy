@@ -43,6 +43,7 @@ export class AppComponent implements OnInit {
 
   getCalendar() {
     debugger;
+    this.meetings.push("data.meetings[i]");
     this.httpClient.get("http://localhost:4000/meetings").toPromise().then((data: any) => { 
       debugger;
       for (var i in data.meetings) {
