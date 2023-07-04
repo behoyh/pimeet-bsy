@@ -2,6 +2,8 @@
   "name": "meetingsdk-sample-angular",
   "version": "2.13.0",
   "author": "Zoom Video Communications, Inc.",
+  "description": "Our awesome application",
+  "license":"UNLICENSED",
   "main": "app.js",
   "contributors": [
     {
@@ -10,11 +12,16 @@
   ],
   "scripts": {
     "ng": "ng",
-    "start": "ng build --configuration production --base-href ./ & electron . --enable-gpu-rasterization --enable-oop-rasterization --enable-accelerated-video-decode --ignore-gpu-blocklist --start-fullscreen --disable-session-crashed-bubble --args --disable-web-security --user-data-dir",
+    "start": "electron-forge start",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "pack": "electron-builder --dir",
+    "dist": "yarn compile && electron-builder",
+    "postinstall": "electron-builder install-app-deps",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "private": true,
   "dependencies": {
@@ -28,6 +35,7 @@
     "@angular/router": "~13.1.0",
     "@zoomus/websdk": "^2.13.0",
     "electron-reload": "^2.0.0-alpha.1",
+    "electron-squirrel-startup": "^1.0.0",
     "rxjs": "7.8.1",
     "tslib": "^2.0.3",
     "zone.js": "~0.11.4"
@@ -36,6 +44,12 @@
     "@angular-devkit/build-angular": "^13.1.1",
     "@angular/cli": "^13.1.1",
     "@angular/compiler-cli": "~13.1.0",
+    "@electron-forge/cli": "^6.2.1",
+    "@electron-forge/maker-deb": "^6.2.1",
+    "@electron-forge/maker-rpm": "^6.2.1",
+    "@electron-forge/maker-squirrel": "^6.2.1",
+    "@electron-forge/maker-zip": "^6.2.1",
+    "@electron-forge/plugin-auto-unpack-natives": "^6.2.1",
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.19.9",

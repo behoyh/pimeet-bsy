@@ -24,8 +24,8 @@ export class AppComponent implements OnInit {
 
   authEndpoint = 'https://pizookie.herokuapp.com/'
   sdkKey = 'Uaty1iKCQAyoJElAMLZhRQ'
-  meetingNumber = '99878568299'
-  passWord = 'MWUzaWhJKzZFbEdUWVFrWVpsNEFTUT09'
+  meetingNumber = '9755002283'
+  passWord = 'ekJKV1cvQW1ibHFjTXNXd0NCTGpNZz09'
   role = 0
   userName = 'beshoy'
   userEmail = ''
