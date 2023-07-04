@@ -42,8 +42,6 @@ export class AppComponent implements OnInit {
   }
 
   getCalendar() {
-    debugger;
-    this.meetings.push("data.meetings[i]");
     this.httpClient.get("http://localhost:8080/token", { responseType: 'text' }).toPromise().then((token: any) => {
       debugger;
       this.httpClient.get("https://api.zoom.us/v2/users/me/meetings", { headers: { "Authorization": "Bearer" + token } }).toPromise().then((data: any) => {
