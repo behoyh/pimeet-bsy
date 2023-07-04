@@ -12,13 +12,11 @@
   ],
   "scripts": {
     "ng": "ng",
-    "start": "electron-forge start",
+    "start": "ng build --configuration development --watch --base-href ./ & electron . --enable-gpu-rasterization --enable-oop-rasterization --enable-accelerated-video-decode --ignore-gpu-blocklist --start-fullscreen --disable-session-crashed-bubble --args --disable-web-security --user-data-dir",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "pack": "electron-builder --dir",
-    "dist": "yarn compile && electron-builder",
     "postinstall": "electron-builder install-app-deps",
     "package": "electron-forge package",
     "make": "electron-forge make"

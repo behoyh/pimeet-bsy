@@ -44,23 +44,26 @@ export class AppComponent implements OnInit {
   getCalendar() {
     debugger;
     this.meetings.push("data.meetings[i]");
-    this.httpClient.get("http://localhost:4000/meetings").toPromise().then((data: any) => { 
+    this.httpClient.get("http://localhost:8080/token", { responseType: 'text' }).toPromise().then((token: any) => {
       debugger;
-      for (var i in data.meetings) {
+      this.httpClient.get("https://api.zoom.us/v2/users/me/meetings", { headers: { "Authorization": "Bearer" + token } }).toPromise().then((data: any) => {
         debugger;
-        this.meetings.push(data.meetings[i]);
-        //this.getSignature()
-        //if meeting.
-      }
-    },() => alert("please visit localhost:4000 to authenticate."));
+        for (var i in data.meetings) {
+          debugger;
+          this.meetings.push(data.meetings[i]);
+          //this.getSignature()
+          //if meeting.
+        }
+      }, () => alert("please visit https://pizoom-hicsxm6moa-uc.a.run.app/ to authenticate."));
+    });
   }
 
   getSignature() {
     this.httpClient.post(this.authEndpoint, {
-	    meetingNumber: this.meetingNumber,
-	    role: this.role
+      meetingNumber: this.meetingNumber,
+      role: this.role
     }).toPromise().then((data: any) => {
-      if(data.signature) {
+      if (data.signature) {
         console.log(data.signature)
         this.startMeeting(data.signature)
       } else {
