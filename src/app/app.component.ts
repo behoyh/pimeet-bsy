@@ -22,16 +22,16 @@ export class AppComponent implements OnInit {
 
   meetings = [];
 
-  authEndpoint = 'https://pizookie.herokuapp.com/'
+  authEndpoint = 'https://pizoom-hicsxm6moa-uc.a.run.app/'
   sdkKey = 'Uaty1iKCQAyoJElAMLZhRQ'
-  meetingNumber = '9755002283'
-  passWord = 'ekJKV1cvQW1ibHFjTXNXd0NCTGpNZz09'
+  meetingNumber = '76436206665'
+  passWord = 'tcnJ3hCwiMaLZv9PXWvAbKguLw97OD.1'
   role = 0
   userName = 'beshoy'
   userEmail = ''
   registrantToken = ''
   zakToken = ''
-  leaveUrl = 'http://localhost:4200'
+  leaveUrl = 'http://localhost:4200/'
 
   constructor(public httpClient: HttpClient, @Inject(DOCUMENT) document) {
 
@@ -42,7 +42,7 @@ export class AppComponent implements OnInit {
   }
 
   getCalendar() {
-    this.httpClient.get("http://localhost:8080/token", { responseType: 'text' }).toPromise().then((token: any) => {
+    this.httpClient.get("https://pizoom-hicsxm6moa-uc.a.run.app/token", { responseType: 'text' }).toPromise().then((token: any) => {
       debugger;
       this.httpClient.get("https://api.zoom.us/v2/users/me/meetings", { headers: { "Authorization": "Bearer" + token } }).toPromise().then((data: any) => {
         debugger;
