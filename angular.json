@@ -24,14 +24,13 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/angular-calendar/css/angular-calendar.css",
               "node_modules/@zoomus/websdk/dist/css/bootstrap.css",
               "node_modules/@zoomus/websdk/dist/css/react-select.css",
               "src/styles.css"
             ],
-            "scripts": [
-            ],
-            "allowedCommonJsDependencies": [
-            ]
+            "scripts": [],
+            "allowedCommonJsDependencies": []
           },
           "configurations": {
             "production": {
@@ -61,7 +60,8 @@
                   "maximumError": "10kb"
                 }
               ]
-            },"development": {
+            },
+            "development": {
               "optimization": false,
               "sourceMap": true,
               "namedChunks": true,
@@ -115,6 +115,7 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/angular-calendar/css/angular-calendar.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -147,5 +148,8 @@
         }
       }
     }},
-  "defaultProject": "meetingsdk-sample-angular"
+  "defaultProject": "meetingsdk-sample-angular",
+  "cli": {
+    "analytics": false
+  }
 }

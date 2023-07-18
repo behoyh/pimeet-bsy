@@ -1,9 +1,0 @@
-<div class="clock">
-  <div class="point"></div>
-  <div *ngFor="let hour of hoursArray" class="hour hour-{{hour}}">
-    {{hour}}
-  </div>
-  <app-hand-arrow [arrowType]="'minute'" [timeDegrees]="minuteDegrees$ | async"></app-hand-arrow>
-  <app-hand-arrow [arrowType]="'hour'" [timeDegrees]="hourDegrees$ | async"></app-hand-arrow>
-  <app-hand-arrow [arrowType]="'second'" [timeDegrees]="secondDegrees$ | async"></app-hand-arrow>
-</div>

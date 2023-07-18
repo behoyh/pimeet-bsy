@@ -4,6 +4,7 @@ import { DOCUMENT } from '@angular/common';
 
 import { ZoomMtg } from '@zoomus/websdk';
 import { MeetingInfo } from '@zoomus/websdk/embedded';
+import { CalendarEvent, CalendarView } from 'angular-calendar';
 
 ZoomMtg.setZoomJSLib('https://source.zoom.us/2.13.0/lib', '/av');
 
@@ -32,6 +33,11 @@ export class AppComponent implements OnInit {
   registrantToken = ''
   zakToken = ''
   leaveUrl = 'http://localhost:4200/'
+  view: CalendarView = CalendarView.Day;
+
+  viewDate: Date = new Date();
+
+  events: CalendarEvent[] = [];
 
   constructor(public httpClient: HttpClient, @Inject(DOCUMENT) document) {
 

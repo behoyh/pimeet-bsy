@@ -31,6 +31,8 @@
     "@angular/platform-browser-dynamic": "~16.1.5",
     "@angular/router": "~16.1.5",
     "@zoomus/websdk": "^2.13.0",
+    "angular-calendar": "^0.31.0",
+    "date-fns": "^2.29.3",
     "electron-reload": "^2.0.0-alpha.1",
     "electron-squirrel-startup": "^1.0.0",
     "rxjs": "7.8.1",
