@@ -17,7 +17,6 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "electron-builder install-app-deps",
     "package": "electron-forge package",
     "make": "electron-forge make"
   },
