@@ -1,10 +1,10 @@
-import { Component, OnInit, Inject, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Inject, ElementRef, ViewChild, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DOCUMENT } from '@angular/common';
 
 import { ZoomMtg } from '@zoomus/websdk';
 import { MeetingInfo } from '@zoomus/websdk/embedded';
-import { CalendarEvent, CalendarView } from 'angular-calendar';
+import { CalendarEvent, CalendarView, CalendarEventTimesChangedEvent } from 'angular-calendar';
 
 ZoomMtg.setZoomJSLib('https://source.zoom.us/2.13.0/lib', '/av');
 
@@ -14,14 +14,33 @@ ZoomMtg.prepareWebSDK();
 ZoomMtg.i18n.load('en-US');
 ZoomMtg.i18n.reload('en-US');
 
+import { HostListener } from '@angular/core';
+import { zoommeeting } from './zoom.meeting';
+
+
 @Component({
   selector: 'app-root',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
+  isonline = navigator.onLine;
 
-  meetings = [];
+  @HostListener('window:online', ['$event'])
+  online(e: any) {
+    this.isonline = true;
+  }
+  @HostListener('window:offline', ['$event'])
+  offline(e: any) {
+    this.isonline = false;
+  }
+
+  date= new Date();
+  now: any;
+  targetDate: any = new Date();
+  targetTime: any = this.targetDate.getTime();
+  difference: number;
 
   authEndpoint = 'https://pizoom-hicsxm6moa-uc.a.run.app/'
   sdkKey = 'Uaty1iKCQAyoJElAMLZhRQ'
@@ -39,6 +58,14 @@ export class AppComponent implements OnInit {
 
   events: CalendarEvent[] = [];
 
+
+  @ViewChild('minutes', { static: true }) minutes: ElementRef;
+  @ViewChild('seconds', { static: true }) seconds: ElementRef;
+
+  ngAfterViewInit() {
+    this.date = new Date()
+  }
+
   constructor(public httpClient: HttpClient, @Inject(DOCUMENT) document) {
 
   }
@@ -49,12 +76,28 @@ export class AppComponent implements OnInit {
 
   getCalendar() {
     this.httpClient.get("https://pizoom-hicsxm6moa-uc.a.run.app/token", { responseType: 'text' }).toPromise().then((token: any) => {
-      debugger;
       this.httpClient.get("https://api.zoom.us/v2/users/me/meetings", { headers: { "Authorization": "Bearer" + token } }).toPromise().then((data: any) => {
-        debugger;
-        for (var i in data.meetings) {
+        for (var i in data.meetings as zoommeeting[]) {
+          let meetingInfo = data.meetings[i] as zoommeeting;
+          let calEvent: CalendarEvent = {
+            title: meetingInfo.topic + " " + meetingInfo.join_url,
+            //color: new EventColor("blue"),
+            start: new Date(meetingInfo.start_time),
+            meta: {
+              joinlink: meetingInfo.join_url,
+            },
+            color: {
+              primary: '#1e90ff',
+              secondary: '#D1E8FF',
+            },
+            resizable: {
+              beforeStart: false,
+              afterEnd: false,
+            },
+            draggable: false,
+          };
           debugger;
-          this.meetings.push(data.meetings[i]);
+          this.events = [...this.events,calEvent];
           //this.getSignature()
           //if meeting.
         }
@@ -108,28 +151,16 @@ export class AppComponent implements OnInit {
       }
     })
   }
-
-  date: any;
-  now: any;
-  targetDate: any = new Date();
-  targetTime: any = this.targetDate.getTime();
-  difference: number;
-
-  @ViewChild('minutes', { static: true }) minutes: ElementRef;
-  @ViewChild('seconds', { static: true }) seconds: ElementRef;
-
-  ngAfterViewInit() {
-    setInterval(() => {
-      this.tickTock();
-      this.difference = this.targetTime - this.now;
-      this.difference = this.difference / (1000 * 60 * 60 * 24);
-    }, 1000);
+  eventTimesChanged({
+    event,
+    newStart,
+    newEnd,
+  }: CalendarEventTimesChangedEvent): void {
+    event.start = newStart;
+    event.end = newEnd;
+    debugger;
+    this.events = [...this.events];
   }
 
-  tickTock() {
-    this.date = new Date();
-    this.now = this.date.getTime();
-    this.minutes.nativeElement.innerText = this.date.getMinutes() - 9;
-    this.seconds.nativeElement.innerText = 60 - this.date.getSeconds();
-  }
 }
+

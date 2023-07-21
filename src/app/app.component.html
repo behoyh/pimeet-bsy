@@ -1,14 +1,12 @@
-<main>
-  <h3>Home</h3>
-
+<p *ngIf="!isonline">Please Connect to BSYFI-6789</p>
+<main *ngIf="isonline">
+  <h6>{{date.toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}}</h6>
+  <h3>{{date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}}</h3>
   <!-- For Component View -->
   <div id="meetingSDKElement">
     <!-- Zoom Meeting SDK Component View Rendered Here -->
   </div>
-<mwl-calendar-day-view [viewDate]="viewDate" [events]="events" [dayStartHour]="9" [dayEndHour]="17">
-</mwl-calendar-day-view>
-
-  <div class="count-down-timer">
+  <div *ngIf="meetingSoon" class="count-down-timer">
     <p>Joining Meeting</p>
     <div class="wrapper">
       <div class="description">
@@ -21,6 +19,8 @@
       </div>
     </div>
   </div>
+  <mwl-calendar-day-view [viewDate]="viewDate" [events]="events" [dayStartHour]="7" [dayEndHour]="20">
+  </mwl-calendar-day-view>
 
   <div *ngFor="let m of meetings">
     {{m.topic}} - {{m.start_time}}
