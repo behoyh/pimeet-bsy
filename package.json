@@ -12,8 +12,9 @@
   ],
   "scripts": {
     "ng": "ng",
-    "start": "ng build --configuration development --watch --base-href ./ & electron . --enable-gpu-rasterization --enable-oop-rasterization --enable-accelerated-video-decode --ignore-gpu-blocklist --start-fullscreen --disable-session-crashed-bubble --args --disable-web-security --user-data-dir",
+    "start": "ng build --configuration development --base-href ./ & electron . --enable-gpu-rasterization --enable-oop-rasterization --enable-accelerated-video-decode --ignore-gpu-blocklist --start-fullscreen --disable-session-crashed-bubble --args --disable-web-security --user-data-dir",
     "build": "ng build",
+    "generateAssets": "ng build --configuration development --base-href ./",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",

@@ -148,7 +148,6 @@
         }
       }
     }},
-  "defaultProject": "meetingsdk-sample-angular",
   "cli": {
     "analytics": false
   }
