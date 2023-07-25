@@ -4,6 +4,7 @@ import { DOCUMENT } from '@angular/common';
 
 import { ZoomMtg } from '@zoomus/websdk';
 import { MeetingInfo } from '@zoomus/websdk/embedded';
+import { ModalService } from './modal';
 import { CalendarEvent, CalendarView, CalendarEventTimesChangedEvent } from 'angular-calendar';
 
 ZoomMtg.setZoomJSLib('https://source.zoom.us/2.13.0/lib', '/av');
@@ -16,6 +17,7 @@ ZoomMtg.i18n.reload('en-US');
 
 import { HostListener } from '@angular/core';
 import { zoommeeting } from './zoom.meeting';
+import { Subscription, interval } from 'rxjs';
 
 
 @Component({
@@ -66,12 +68,17 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.date = new Date()
   }
 
-  constructor(public httpClient: HttpClient, @Inject(DOCUMENT) document) {
+  constructor(public httpClient: HttpClient, @Inject(DOCUMENT) document, protected modalService: ModalService) {
 
   }
 
+  private updateSubscription: Subscription;
   ngOnInit() {
-    this.getCalendar();
+    this.updateSubscription = interval(10000).subscribe(
+      (val) => {
+        this.getCalendar();
+      }
+    );
   }
 
   getCalendar() {
@@ -101,7 +108,7 @@ export class AppComponent implements OnInit, AfterViewInit {
           //this.getSignature()
           //if meeting.
         }
-      }, () => alert("please visit https://pizoom-hicsxm6moa-uc.a.run.app/ to authenticate."));
+      }, () => this.modalService.open('modal-2'));
     });
   }
 
