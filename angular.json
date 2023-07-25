@@ -30,7 +30,7 @@
               "src/styles.css"
             ],
             "scripts": [],
-            "allowedCommonJsDependencies": []
+            "allowedCommonJsDependencies": ["qrcode"]
           },
           "configurations": {
             "production": {
@@ -148,7 +148,6 @@
         }
       }
     }},
-  "defaultProject": "meetingsdk-sample-angular",
   "cli": {
     "analytics": false
   }
