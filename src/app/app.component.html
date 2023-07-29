@@ -1,4 +1,4 @@
-<p *ngIf="!isonline">Please Connect to BSYFI-6789 <qr-code value="BSYFI-6789" errorCorrectionLevel="H"></qr-code></p>
+<p *ngIf="!isonline">Please Connect to BSYFI-6789 <qr-code value="WIFI:T:nopass;S:BSY-Hotspot;;" errorCorrectionLevel="H"></qr-code></p>
 <main *ngIf="isonline">
   <h6>{{date.toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}}</h6>
   <h3>{{date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}}</h3>
@@ -19,7 +19,7 @@
       </div>
     </div>
   </div>
-  <mwl-calendar-day-view [viewDate]="viewDate" [events]="events" [dayStartHour]="7" [dayEndHour]="20">
+  <mwl-calendar-day-view [viewDate]="viewDate" [events]="events" [dayStartHour]="7" [dayEndHour]="23">
   </mwl-calendar-day-view>
 
   <div *ngFor="let m of meetings">

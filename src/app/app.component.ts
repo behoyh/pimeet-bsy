@@ -22,7 +22,6 @@ import { Subscription, interval } from 'rxjs';
 
 @Component({
   selector: 'app-root',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
