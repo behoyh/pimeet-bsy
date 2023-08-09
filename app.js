@@ -15,6 +15,7 @@ function createWindow() {
             devTools: false
         }
     })
+    mainWindow.maximize();
 
     mainWindow.loadURL(
         url.format({
