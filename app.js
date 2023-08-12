@@ -12,7 +12,7 @@ function createWindow() {
         height: 600,
         webPreferences: {
             nodeIntegration: true,
-            devTools: false
+            devTools: true
         }
     })
     mainWindow.maximize();
@@ -24,12 +24,20 @@ function createWindow() {
             slashes: true
         })
     );
-    // Open the DevTools.
-    mainWindow.webContents.openDevTools()
 
     mainWindow.on('closed', function () {
         mainWindow = null
-    })
+    });
+
+    mainWindow.webContents.on("did-fail-load", function () {
+        mainWindow.loadURL(
+            url.format({
+                pathname: path.join(__dirname, `/docs/index.html`),
+                protocol: "file:",
+                slashes: true
+            })
+        );
+    });
 }
 
 app.on('ready', createWindow)

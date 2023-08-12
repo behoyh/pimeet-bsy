@@ -1,8 +1,9 @@
 import { Component, OnInit, Inject, ElementRef, ViewChild, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DOCUMENT } from '@angular/common';
-
+import { TimeDate } from "./common/timedate"
 import { ZoomMtg } from '@zoomus/websdk';
+import { ZoomService } from './zoom.service';
 import { MeetingInfo } from '@zoomus/websdk/embedded';
 import { ModalService } from './modal';
 import { CalendarEvent, CalendarView, CalendarEventTimesChangedEvent } from 'angular-calendar';
@@ -37,22 +38,24 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.isonline = false;
   }
 
-  date= new Date();
+  date = new Date();
   now: any;
   targetDate: any = new Date();
   targetTime: any = this.targetDate.getTime();
   difference: number;
 
+  joined: boolean;
+
   authEndpoint = 'https://pizoom-hicsxm6moa-uc.a.run.app/'
   sdkKey = 'Uaty1iKCQAyoJElAMLZhRQ'
-  meetingNumber = '76436206665'
-  passWord = 'tcnJ3hCwiMaLZv9PXWvAbKguLw97OD.1'
+  meetingNumber = ''
+  passWord = ''
   role = 0
-  userName = 'beshoy'
+  userName = ''
   userEmail = ''
   registrantToken = ''
   zakToken = ''
-  leaveUrl = 'http://localhost:4200/'
+  leaveUrl = './'
   view: CalendarView = CalendarView.Day;
 
   viewDate: Date = new Date();
@@ -67,7 +70,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.date = new Date()
   }
 
-  constructor(public httpClient: HttpClient, @Inject(DOCUMENT) document, protected modalService: ModalService) {
+  constructor(public httpClient: HttpClient, public zoomService: ZoomService, protected modalService: ModalService) {
 
   }
 
@@ -82,9 +85,18 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   getCalendar() {
     this.httpClient.get("https://pizoom-hicsxm6moa-uc.a.run.app/token", { responseType: 'text' }).toPromise().then((token: any) => {
-      this.httpClient.get("https://api.zoom.us/v2/users/me/meetings", { headers: { "Authorization": "Bearer" + token } }).toPromise().then((data: any) => {
+      this.modalService.close();
+      this.httpClient.get("https://api.zoom.us/v2/users/me/meetings", { headers: { "Authorization": "Bearer " + token } }).toPromise().then((data: any) => {
         for (var i in data.meetings as zoommeeting[]) {
           let meetingInfo = data.meetings[i] as zoommeeting;
+          this.zoomService.getMeeting(token, meetingInfo.id).subscribe((resp: any) => {
+            if (resp != null) {
+              debugger;
+              this.passWord = resp.encrypted_password
+              this.meetingNumber = resp.id
+              this.userName = resp.host_email
+            }
+          });
           let calEvent: CalendarEvent = {
             title: meetingInfo.topic + " " + meetingInfo.join_url,
             //color: new EventColor("blue"),
@@ -102,10 +114,15 @@ export class AppComponent implements OnInit, AfterViewInit {
             },
             draggable: false,
           };
-          debugger;
-          this.events = [...this.events,calEvent];
-          //this.getSignature()
-          //if meeting.
+          this.events = [];
+          this.events = [...this.events, calEvent];
+          if (TimeDate.withinHour(new Date(meetingInfo.start_time))) {
+            //start countdown
+            if (!this.joined && this.meetingNumber) {
+              this.getSignature();
+              this.joined = true;
+            }
+          }
         }
       }, () => this.modalService.open('modal-2'));
     });
@@ -128,9 +145,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   startMeeting(signature) {
-
+    debugger;
     document.getElementById('zmmtg-root').style.display = 'block'
-
     ZoomMtg.init({
       leaveUrl: this.leaveUrl,
       success: (success) => {
@@ -164,7 +180,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   }: CalendarEventTimesChangedEvent): void {
     event.start = newStart;
     event.end = newEnd;
-    debugger;
     this.events = [...this.events];
   }
 
