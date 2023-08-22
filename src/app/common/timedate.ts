@@ -17,7 +17,7 @@ export class TimeDate {
     const HOUR = 1000 * 60 * 60;
     const anHourAgo = Date.now() - HOUR;
     const anHourAfter = Date.now() + HOUR;
-
-    return anHourAgo <= date && date <= anHourAfter;
+    var curr = date.getTime();
+    return anHourAgo < curr && curr < anHourAfter;
   }
 }

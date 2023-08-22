@@ -11,4 +11,8 @@ export class ZoomService {
   getMeeting(token, meeting) {
     return this.httpClient.get("https://api.zoom.us/v2/meetings/"+meeting, { headers: { "Authorization": "Bearer " + token } });
   }
+
+  getZAK(token) {
+    return this.httpClient.get("https://api.zoom.us/v2/users/me/token?type=zak", { headers: { "Authorization": "Bearer " + token } });
+  }
 }

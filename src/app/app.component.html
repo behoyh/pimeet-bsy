@@ -1,5 +1,12 @@
-<p *ngIf="!isonline">Please Connect to BSYFI-6789 <qr-code value="WIFI:T:nopass;S:BSY-Hotspot;;" errorCorrectionLevel="H"></qr-code></p>
-<main *ngIf="isonline">
+<div class="content" *ngIf="!isonline">
+  <h1>B S Y</h1>
+  <p>loading...</p>
+</div>
+<div class="content" *ngIf="isonline && !isconnected">
+  <p>Please Connect to BSY-WIFI</p>
+  <qr-code value="WIFI:T:nopass;S:BSY-Hotspot;;" errorCorrectionLevel="H"></qr-code>
+</div>
+<main *ngIf="isonline && isconnected">
   <h6>{{date.toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}}</h6>
   <h3>{{date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}}</h3>
   <!-- For Component View -->
@@ -28,8 +35,8 @@
   </div>
 </main>
 
-  <jw-modal id="modal-2">
-    <h1>Login to Zoom</h1>
-    <p>"please visit https://pizoom-hicsxm6moa-uc.a.run.app/ to authenticate."</p>
-    <qr-code value="https://pizoom-hicsxm6moa-uc.a.run.app/" errorCorrectionLevel="H"></qr-code>
-  </jw-modal>
+<jw-modal id="modal-2">
+  <h1>Login to Zoom</h1>
+  <p>"please visit https://pizoom-hicsxm6moa-uc.a.run.app/ to authenticate."</p>
+  <qr-code value="https://pizoom-hicsxm6moa-uc.a.run.app/" errorCorrectionLevel="H"></qr-code>
+</jw-modal>

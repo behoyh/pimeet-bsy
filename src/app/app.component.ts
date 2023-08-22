@@ -28,7 +28,7 @@ import { Subscription, interval } from 'rxjs';
 })
 export class AppComponent implements OnInit, AfterViewInit {
   isonline = navigator.onLine;
-
+  isconnected = false;
   @HostListener('window:online', ['$event'])
   online(e: any) {
     this.isonline = true;
@@ -50,7 +50,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   sdkKey = 'Uaty1iKCQAyoJElAMLZhRQ'
   meetingNumber = ''
   passWord = ''
-  role = 0
+  role = 1
   userName = ''
   userEmail = ''
   registrantToken = ''
@@ -66,8 +66,9 @@ export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('minutes', { static: true }) minutes: ElementRef;
   @ViewChild('seconds', { static: true }) seconds: ElementRef;
 
-  ngAfterViewInit() {
-    this.date = new Date()
+  async ngAfterViewInit() {
+    this.date = new Date();
+    this.isconnected = await this.checkOnlineStatus();
   }
 
   constructor(public httpClient: HttpClient, public zoomService: ZoomService, protected modalService: ModalService) {
@@ -77,7 +78,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   private updateSubscription: Subscription;
   ngOnInit() {
     this.updateSubscription = interval(10000).subscribe(
-      (val) => {
+      async (val) => {
+        this.isconnected = await this.checkOnlineStatus();
         this.getCalendar();
       }
     );
@@ -89,14 +91,6 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.httpClient.get("https://api.zoom.us/v2/users/me/meetings", { headers: { "Authorization": "Bearer " + token } }).toPromise().then((data: any) => {
         for (var i in data.meetings as zoommeeting[]) {
           let meetingInfo = data.meetings[i] as zoommeeting;
-          this.zoomService.getMeeting(token, meetingInfo.id).subscribe((resp: any) => {
-            if (resp != null) {
-              debugger;
-              this.passWord = resp.encrypted_password
-              this.meetingNumber = resp.id
-              this.userName = resp.host_email
-            }
-          });
           let calEvent: CalendarEvent = {
             title: meetingInfo.topic + " " + meetingInfo.join_url,
             //color: new EventColor("blue"),
@@ -117,11 +111,22 @@ export class AppComponent implements OnInit, AfterViewInit {
           this.events = [];
           this.events = [...this.events, calEvent];
           if (TimeDate.withinHour(new Date(meetingInfo.start_time))) {
-            //start countdown
-            if (!this.joined && this.meetingNumber) {
-              this.getSignature();
-              this.joined = true;
-            }
+            this.zoomService.getMeeting(token, meetingInfo.id).subscribe((resp: any) => {
+              if (resp != null) {
+                this.passWord = resp.encrypted_password
+                this.meetingNumber = resp.id
+                this.userName = resp.host_email
+              }
+
+              //start countdown
+              if (!this.joined && this.meetingNumber) {
+                this.zoomService.getZAK(token).subscribe((resp: any) => {
+                  this.zakToken = data.token;
+                  this.getSignature();
+                });
+                this.joined = true;
+              }
+            });
           }
         }
       }, () => this.modalService.open('modal-2'));
@@ -145,7 +150,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   startMeeting(signature) {
-    debugger;
     document.getElementById('zmmtg-root').style.display = 'block'
     ZoomMtg.init({
       leaveUrl: this.leaveUrl,
@@ -158,6 +162,7 @@ export class AppComponent implements OnInit, AfterViewInit {
           passWord: this.passWord,
           userName: this.userName,
           userEmail: this.userEmail,
+          customerKey: '',
           tk: this.registrantToken,
           zak: this.zakToken,
           success: (success) => {
@@ -166,7 +171,8 @@ export class AppComponent implements OnInit, AfterViewInit {
           error: (error) => {
             console.log(error)
           }
-        })
+        });
+        document.getElementById("join-btn").click();
       },
       error: (error) => {
         console.log(error)
@@ -182,6 +188,15 @@ export class AppComponent implements OnInit, AfterViewInit {
     event.end = newEnd;
     this.events = [...this.events];
   }
+
+  async checkOnlineStatus() {
+    try {
+      const online = await fetch("https://google.com");
+      return online.status >= 200 && online.status < 300; // either true or false
+    } catch (err) {
+      return false; // definitely offline
+    }
+  };
 
 }
 
