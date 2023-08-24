@@ -7,7 +7,7 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { ModalComponent } from './modal';
 import { QrCodeModule } from 'ng-qrcode';
-import { TimeDate } from './common/timedate';
+import { HotToastModule } from '@ngneat/hot-toast';
 
 @NgModule({
   declarations: [
@@ -21,6 +21,7 @@ import { TimeDate } from './common/timedate';
     ReactiveFormsModule,
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
     QrCodeModule,
+    HotToastModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

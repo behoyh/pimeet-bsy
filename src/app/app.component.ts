@@ -1,11 +1,10 @@
-import { Component, OnInit, Inject, ElementRef, ViewChild, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { DOCUMENT } from '@angular/common';
 import { TimeDate } from "./common/timedate"
 import { ZoomMtg } from '@zoomus/websdk';
 import { ZoomService } from './zoom.service';
-import { MeetingInfo } from '@zoomus/websdk/embedded';
 import { ModalService } from './modal';
+import { HotToastService } from '@ngneat/hot-toast';
 import { CalendarEvent, CalendarView, CalendarEventTimesChangedEvent } from 'angular-calendar';
 
 ZoomMtg.setZoomJSLib('https://source.zoom.us/2.13.0/lib', '/av');
@@ -62,6 +61,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   events: CalendarEvent[] = [];
 
+  countdown: any;
 
   @ViewChild('minutes', { static: true }) minutes: ElementRef;
   @ViewChild('seconds', { static: true }) seconds: ElementRef;
@@ -71,13 +71,13 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.isconnected = await this.checkOnlineStatus();
   }
 
-  constructor(public httpClient: HttpClient, public zoomService: ZoomService, protected modalService: ModalService) {
+  constructor(public httpClient: HttpClient, public zoomService: ZoomService, protected modalService: ModalService, private toastService: HotToastService) {
 
   }
 
   private updateSubscription: Subscription;
   ngOnInit() {
-    this.updateSubscription = interval(10000).subscribe(
+    this.updateSubscription = interval(5000).subscribe(
       async (val) => {
         this.isconnected = await this.checkOnlineStatus();
         this.getCalendar();
@@ -118,14 +118,32 @@ export class AppComponent implements OnInit, AfterViewInit {
                 this.userName = resp.host_email
               }
 
+              const scope = this;
               //start countdown
-              if (!this.joined && this.meetingNumber) {
-                this.zoomService.getZAK(token).subscribe((resp: any) => {
-                  this.zakToken = data.token;
-                  this.getSignature();
-                });
-                this.joined = true;
+              if (!scope.countdown) {
+                scope.countdown = interval(1000).pipe(
+                  scope.toastService.observe({
+                    loading: 'Joining meeting...',
+                    success: (val) => {
+                      if (val >= 9) {
+                        scope.countdown.unsubscribe();
+                        return "Joined meeting";
+                      }
+                      return 'Joining meeting... In ' + Math.abs(val - 9) + " seconds";
+                    }
+                  })
+                ).subscribe();
               }
+              interval(10000).subscribe(
+                async (val) => {
+                  if (!this.joined && this.meetingNumber) {
+                    this.zoomService.getZAK(token).subscribe((resp: any) => {
+                      this.zakToken = data.token;
+                      this.getSignature();
+                    });
+                    this.joined = true;
+                  }
+                });
             });
           }
         }
