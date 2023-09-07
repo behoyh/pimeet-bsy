@@ -7,6 +7,8 @@ require('electron-reload')(__dirname);
 let mainWindow
 
 function createWindow() {
+    app.commandLine.appendSwitch('enable-features', 'SharedArrayBuffer')
+    
     mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
@@ -15,6 +17,14 @@ function createWindow() {
             devTools: true
         }
     })
+
+    // Enable SharedArrayBuffer
+    mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+        details.responseHeaders['Cross-Origin-Opener-Policy'] = ['same-origin'];
+        details.responseHeaders['Cross-Origin-Embedder-Policy'] = ['require-corp'];
+        callback({ responseHeaders: details.responseHeaders });
+    });
+
     mainWindow.maximize();
 
     mainWindow.loadURL(

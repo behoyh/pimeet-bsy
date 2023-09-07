@@ -168,6 +168,26 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   startMeeting(signature) {
+    let subAudio = interval(2000).subscribe(
+      (val) => {
+        let audiosearch = document.getElementsByClassName("join-audio-by-voip__join-btn");
+        if (audiosearch.length > 0) {
+          let ele = audiosearch[0] as HTMLElement;
+          ele.click();
+          subAudio.unsubscribe();
+        }
+      });
+    let subVideo = interval(4000).subscribe(
+      (val) => {
+        debugger;
+        let videosearch = document.getElementsByClassName("send-video-container__btn");
+        if (videosearch.length > 0) {
+          let ele = videosearch[0] as HTMLElement;
+          ele.click();
+          subVideo.unsubscribe();
+        }
+      }
+    )
     document.getElementById('zmmtg-root').style.display = 'block'
     ZoomMtg.init({
       leaveUrl: this.leaveUrl,
