@@ -179,7 +179,6 @@ export class AppComponent implements OnInit, AfterViewInit {
       });
     let subVideo = interval(4000).subscribe(
       (val) => {
-        debugger;
         let videosearch = document.getElementsByClassName("send-video-container__btn");
         if (videosearch.length > 0) {
           let ele = videosearch[0] as HTMLElement;
