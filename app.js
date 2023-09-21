@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, screen  } = require('electron')
 const url = require("url");
 const path = require("path");
 
@@ -9,13 +9,18 @@ let mainWindow
 function createWindow() {
     app.commandLine.appendSwitch('enable-features', 'SharedArrayBuffer')
     
+    var mainScreen = screen.getPrimaryDisplay();
+    var dimensions = mainScreen.size;
     mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: dimensions.width,
+        height: dimensions.height,
         webPreferences: {
             nodeIntegration: true,
             devTools: true
-        }
+        },
+        frame: false,
+        titleBarStyle: 'hidden',
+        transparent: true
     })
 
     // Enable SharedArrayBuffer
