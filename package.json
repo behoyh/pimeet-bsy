@@ -1,13 +1,13 @@
 {
-  "name": "meetingsdk-sample-angular",
+  "name": "actlab",
   "version": "2.13.0",
-  "author": "Zoom Video Communications, Inc.",
+  "author": "ActLab.ai, Inc",
   "description": "Our awesome application",
   "license": "UNLICENSED",
   "main": "app.js",
   "contributors": [
     {
-      "name": "Tommy Gaessler"
+      "name": "Beshoy Hanna"
     }
   ],
   "scripts": {

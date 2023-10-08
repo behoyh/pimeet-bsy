@@ -129,7 +129,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                         scope.countdown.unsubscribe();
                         return "Joined meeting";
                       }
-                      return 'Joining meeting... In ' + Math.abs(val - 9) + " seconds";
+                      return 'Ready to Start? Joining meeting... In ' + Math.abs(val - 9) + " seconds";
                     }
                   })
                 ).subscribe();
@@ -209,7 +209,18 @@ export class AppComponent implements OnInit, AfterViewInit {
             console.log(error)
           }
         });
-        document.getElementById("join-btn").click();
+        let subJoin = interval(1000).subscribe(
+          (val) => {
+            let joinbtn = document.getElementById("join-btn");
+            if (joinbtn) {
+              let ele = joinbtn;
+              ele.click();
+              ele.click();
+              document.getElementById("join-btn").click();
+              document.getElementById("join-btn").click();
+              subJoin.unsubscribe();
+            }
+          });
       },
       error: (error) => {
         console.log(error)
