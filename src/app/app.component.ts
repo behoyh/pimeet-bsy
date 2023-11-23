@@ -89,6 +89,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.httpClient.get("https://pizoom-hicsxm6moa-uc.a.run.app/token", { responseType: 'text' }).toPromise().then((token: any) => {
       this.modalService.close();
       this.httpClient.get("https://api.zoom.us/v2/users/me/meetings", { headers: { "Authorization": "Bearer " + token } }).toPromise().then((data: any) => {
+        this.events = [];
         for (var i in data.meetings as zoommeeting[]) {
           let meetingInfo = data.meetings[i] as zoommeeting;
           let calEvent: CalendarEvent = {
@@ -108,7 +109,6 @@ export class AppComponent implements OnInit, AfterViewInit {
             },
             draggable: false,
           };
-          this.events = [];
           this.events = [...this.events, calEvent];
           if (TimeDate.withinHour(new Date(meetingInfo.start_time))) {
             this.zoomService.getMeeting(token, meetingInfo.id).subscribe((resp: any) => {
@@ -169,19 +169,27 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   startMeeting(signature) {
     let subAudio = interval(2000).subscribe(
-      (val) => {
+      async (val) => {
         let audiosearch = document.getElementsByClassName("join-audio-by-voip__join-btn");
         if (audiosearch.length > 0) {
           let ele = audiosearch[0] as HTMLElement;
+          ele.click();
+          await this.delay(1000);
+          ele.click();
+          await this.delay(1000);
           ele.click();
           subAudio.unsubscribe();
         }
       });
     let subVideo = interval(4000).subscribe(
-      (val) => {
+      async (val) => {
         let videosearch = document.getElementsByClassName("send-video-container__btn");
         if (videosearch.length > 0) {
           let ele = videosearch[0] as HTMLElement;
+          ele.click();
+          await this.delay(1000);
+          ele.click();
+          await this.delay(1000);
           ele.click();
           subVideo.unsubscribe();
         }
@@ -245,6 +253,10 @@ export class AppComponent implements OnInit, AfterViewInit {
       return false; // definitely offline
     }
   };
+  async delay(ms) {
+    // return await for better async stack trace support in case of errors.
+    return await new Promise(resolve => setTimeout(resolve, ms));
+  }
 
 }
 
