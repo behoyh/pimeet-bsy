@@ -87,6 +87,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       api.setMeeting(meetings[i]);
       meetings.splice(i, 1);
     }
+    localStorage.setItem("meetings", JSON.stringify(meetings));
 
     this.updateSubscription = interval(5000).subscribe(
       async (val) => {
