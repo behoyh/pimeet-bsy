@@ -34,7 +34,7 @@
     "@ngneat/overview": "^3.0.0",
     "@schematics/angular": "^16.2.0",
     "@types/electron": "^1.6.10",
-    "@zoomus/websdk": "^2.13.0",
+    "@zoomus/websdk": "^2.18.0",
     "angular-calendar": "^0.31.0",
     "date-fns": "^2.29.3",
     "electron-reload": "^2.0.0-alpha.1",
@@ -44,7 +44,7 @@
     "node-fetch": "^2.7.0",
     "rxjs": "7.8.1",
     "tslib": "^2.0.3",
-    "zone.js": "~0.13.1"
+    "zone.js": "~0.14.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^16.1.4",
@@ -71,6 +71,6 @@
     "protractor": "~7.0.0",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
-    "typescript": "^4.5.3"
+    "typescript": "^5.2"
   }
 }
