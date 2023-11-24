@@ -86,21 +86,21 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "meetingsdk-sample-angular:build"
+            "buildTarget": "meetingsdk-sample-angular:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "meetingsdk-sample-angular:build:production"
+              "buildTarget": "meetingsdk-sample-angular:build:production"
             },
             "development": {
-              "browserTarget": "studio:build:development"
+              "buildTarget": "studio:build:development"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "meetingsdk-sample-angular:build"
+            "buildTarget": "meetingsdk-sample-angular:build"
           }
         },
         "test": {
