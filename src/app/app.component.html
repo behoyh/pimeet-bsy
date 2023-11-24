@@ -26,7 +26,7 @@
       </div>
     </div>
   </div>
-  <mwl-calendar-day-view [viewDate]="viewDate" [events]="events" [dayStartHour]="7" [dayEndHour]="23">
+  <mwl-calendar-day-view *ngIf="!joined" [viewDate]="viewDate" [events]="events" [dayStartHour]="7" [dayEndHour]="23">
   </mwl-calendar-day-view>
 
   <div *ngFor="let m of meetings">

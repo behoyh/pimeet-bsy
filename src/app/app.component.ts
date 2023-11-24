@@ -77,6 +77,17 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   private updateSubscription: Subscription;
   ngOnInit() {
+    const api = (<any>window).electronAPI;
+    let meetings = [];
+    if (localStorage.getItem('meetings')) {
+      meetings = JSON.parse(localStorage.getItem('meetings'));
+    }
+    var i = meetings.length;
+    while ((i--) > 0) {
+      api.setMeeting(meetings[i]);
+      meetings.splice(i, 1);
+    }
+
     this.updateSubscription = interval(5000).subscribe(
       async (val) => {
         this.isconnected = await this.checkOnlineStatus();
@@ -126,6 +137,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                     loading: 'Joining meeting...',
                     success: (val) => {
                       if (val >= 9) {
+                        localStorage.setItem("meetings", JSON.stringify([meetingInfo.id]));
                         scope.countdown.unsubscribe();
                         return "Joined meeting";
                       }
