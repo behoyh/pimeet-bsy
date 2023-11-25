@@ -63,6 +63,8 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   countdown: any;
 
+  api = (<any>window).electronAPI;
+
   @ViewChild('minutes', { static: true }) minutes: ElementRef;
   @ViewChild('seconds', { static: true }) seconds: ElementRef;
 
@@ -77,14 +79,13 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   private updateSubscription: Subscription;
   ngOnInit() {
-    const api = (<any>window).electronAPI;
     let meetings = [];
     if (localStorage.getItem('meetings')) {
       meetings = JSON.parse(localStorage.getItem('meetings'));
     }
     var i = meetings.length;
     while ((i--) > 0) {
-      api.setMeeting(meetings[i]);
+      this.api.stopMeeting(meetings[i]);
       meetings.splice(i, 1);
     }
     localStorage.setItem("meetings", JSON.stringify(meetings));
@@ -139,6 +140,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                     success: (val) => {
                       if (val >= 9) {
                         localStorage.setItem("meetings", JSON.stringify([meetingInfo.id]));
+                        this.api.startMeeting();
                         scope.countdown.unsubscribe();
                         return "Joined meeting";
                       }
@@ -187,10 +189,6 @@ export class AppComponent implements OnInit, AfterViewInit {
         if (audiosearch.length > 0) {
           let ele = audiosearch[0] as HTMLElement;
           ele.click();
-          await this.delay(1000);
-          ele.click();
-          await this.delay(1000);
-          ele.click();
           subAudio.unsubscribe();
         }
       });
@@ -199,10 +197,6 @@ export class AppComponent implements OnInit, AfterViewInit {
         let videosearch = document.getElementsByClassName("send-video-container__btn");
         if (videosearch.length > 0) {
           let ele = videosearch[0] as HTMLElement;
-          ele.click();
-          await this.delay(1000);
-          ele.click();
-          await this.delay(1000);
           ele.click();
           subVideo.unsubscribe();
         }
@@ -236,8 +230,6 @@ export class AppComponent implements OnInit, AfterViewInit {
             if (joinbtn) {
               let ele = joinbtn;
               ele.click();
-              ele.click();
-              document.getElementById("join-btn").click();
               document.getElementById("join-btn").click();
               subJoin.unsubscribe();
             }
