@@ -1,23 +1,22 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TimeDate } from "./common/timedate"
-import { ZoomMtg } from '@zoomus/websdk';
 import { ZoomService } from './zoom.service';
 import { ModalService } from './modal';
 import { HotToastService } from '@ngneat/hot-toast';
 import { CalendarEvent, CalendarView, CalendarEventTimesChangedEvent } from 'angular-calendar';
+import { HostListener } from '@angular/core';
+import { zoommeeting } from './zoom.meeting';
+import { Subscription, interval } from 'rxjs';
+import { ZoomMtg } from '@zoomus/websdk';
 
-ZoomMtg.setZoomJSLib('https://source.zoom.us/2.13.0/lib', '/av');
+ZoomMtg.setZoomJSLib('https://source.zoom.us/2.18.0/lib', '/av');
 
 ZoomMtg.preLoadWasm();
 ZoomMtg.prepareWebSDK();
 // loads language files, also passes any error messages to the ui
 ZoomMtg.i18n.load('en-US');
 ZoomMtg.i18n.reload('en-US');
-
-import { HostListener } from '@angular/core';
-import { zoommeeting } from './zoom.meeting';
-import { Subscription, interval } from 'rxjs';
 
 
 @Component({
@@ -46,7 +45,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   joined: boolean;
 
   authEndpoint = 'https://pizoom-hicsxm6moa-uc.a.run.app/'
-  sdkKey = 'Uaty1iKCQAyoJElAMLZhRQ'
+  sdkKey = '8ehfGtgEQfAYSdE_LN6Q'
   meetingNumber = ''
   passWord = ''
   role = 1
@@ -152,9 +151,14 @@ export class AppComponent implements OnInit, AfterViewInit {
               interval(10000).subscribe(
                 async (val) => {
                   if (!this.joined && this.meetingNumber) {
-                    this.zoomService.getZAK(token).subscribe((resp: any) => {
-                      this.zakToken = data.token;
-                      this.getSignature();
+                    this.zoomService.getZAK(token).subscribe({
+                      next: (resp: any) => {
+                        this.zakToken = resp.token;
+                        this.getSignature();
+                      },
+                      error: (error: any) => { 
+                        alert(error);
+                      }
                     });
                     this.joined = true;
                   }

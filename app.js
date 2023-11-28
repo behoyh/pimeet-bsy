@@ -72,7 +72,7 @@ async function emailSummary(meetingId) {
         body: JSON.stringify({
             "title": "THIS... IS A TEST",
             "summary": fs.readFileSync("myFile2.txt", { encoding: 'utf8' }),
-            "emails": ["youhanna@actlab.ai"]
+            "emails": ["beshoy@actlab.ai"]
         }),
         headers: { 'Content-Type': 'application/json' }
     });

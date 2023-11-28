@@ -55,7 +55,7 @@ exports.startRecording = function startRecording() {
 }
 
 exports.stopRecording = function stopRecording() {
-    if (recording) {
+    if (recording && recording.stop) {
         recording.stop();
     }
 }
