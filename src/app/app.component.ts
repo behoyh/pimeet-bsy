@@ -10,7 +10,7 @@ import { zoommeeting } from './zoom.meeting';
 import { Subscription, interval } from 'rxjs';
 import { ZoomMtg } from '@zoomus/websdk';
 
-ZoomMtg.setZoomJSLib('https://source.zoom.us/2.18.0/lib', '/av');
+ZoomMtg.setZoomJSLib('https://source.zoom.us/2.13.0/lib', '/av');
 
 ZoomMtg.preLoadWasm();
 ZoomMtg.prepareWebSDK();

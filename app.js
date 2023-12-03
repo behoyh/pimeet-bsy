@@ -1,16 +1,14 @@
-const { app, BrowserWindow, screen, ipcMain  } = require('electron')
+const { app, BrowserWindow, screen, ipcMain } = require('electron')
 const url = require("url");
 const path = require("path");
-const Transcriber = require(__dirname + "/audio-transcriber");
+
 require('electron-reload')(__dirname);
-const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
-const fs = require("fs");
 
 let mainWindow
 
 function createWindow() {
     app.commandLine.appendSwitch('enable-features', 'SharedArrayBuffer')
-    
+
     var mainScreen = screen.getPrimaryDisplay();
     var dimensions = mainScreen.size;
     mainWindow = new BrowserWindow({
@@ -48,12 +46,12 @@ function createWindow() {
     });
 
     ipcMain.on('start-meeting', (event, meeting) => {
-        Transcriber.startRecording(meeting);
+        //Transcriber.startRecording(meeting);
     })
 
     ipcMain.on('stop-meeting', (event, meeting) => {
-        emailSummary(meeting);
-        Transcriber.stopRecording();
+        //emailSummary(meeting);
+        //Transcriber.stopRecording();
     })
 
     mainWindow.webContents.on("did-fail-load", function () {
