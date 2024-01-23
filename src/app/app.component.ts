@@ -9,6 +9,7 @@ import { HostListener } from '@angular/core';
 import { zoommeeting } from './zoom.meeting';
 import { Subscription, interval } from 'rxjs';
 import { ZoomMtg } from '@zoomus/websdk';
+import { GOOGLE_MEET } from './common/constants';
 
 ZoomMtg.setZoomJSLib('https://source.zoom.us/2.13.0/lib', '/av');
 
@@ -110,6 +111,7 @@ export class AppComponent implements OnInit, AfterViewInit {
             start: new Date(meetingInfo.start_time),
             meta: {
               joinlink: meetingInfo.join_url,
+              type: GOOGLE_MEET
             },
             color: {
               primary: '#1e90ff',
@@ -139,7 +141,6 @@ export class AppComponent implements OnInit, AfterViewInit {
                     success: (val) => {
                       if (val >= 9) {
                         localStorage.setItem("meetings", JSON.stringify([meetingInfo.id]));
-                        this.api.startMeeting();
                         scope.countdown.unsubscribe();
                         return "Joined meeting";
                       }
@@ -176,8 +177,9 @@ export class AppComponent implements OnInit, AfterViewInit {
       role: this.role
     }).toPromise().then((data: any) => {
       if (data.signature) {
-        console.log(data.signature)
-        this.startMeeting(data.signature)
+        console.log(data.signature);
+        this.startMeeting(data.signature);
+        this.api.startMeeting();
       } else {
         console.log(data)
       }

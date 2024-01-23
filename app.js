@@ -46,12 +46,23 @@ function createWindow() {
     });
 
     ipcMain.on('start-meeting', (event, meeting) => {
-        //Transcriber.startRecording(meeting);
+        fetch('http://localhost:4002/start', {
+            method: 'post',
+            headers: { 'Content-Type': 'application/json' }
+        }).then((response) => {
+            const data = response.json();
+            console.log(data);
+        });
     })
 
     ipcMain.on('stop-meeting', (event, meeting) => {
-        //emailSummary(meeting);
-        //Transcriber.stopRecording();
+        fetch('http://localhost:4002/stop', {
+            method: 'post',
+            headers: { 'Content-Type': 'application/json' }
+        }).then((response) => {
+            const data = response.json();
+            console.log(data);
+        });
     })
 
     mainWindow.webContents.on("did-fail-load", function () {
@@ -63,19 +74,6 @@ function createWindow() {
             })
         );
     });
-}
-async function emailSummary(meetingId) {
-    const response = await fetch('https://bsysummary-hicsxm6moa-uc.a.run.app', {
-        method: 'post',
-        body: JSON.stringify({
-            "title": "THIS... IS A TEST",
-            "summary": fs.readFileSync("myFile2.txt", { encoding: 'utf8' }),
-            "emails": ["beshoy@actlab.ai"]
-        }),
-        headers: { 'Content-Type': 'application/json' }
-    });
-    const data = await response.json();
-    console.log(data);
 }
 
 app.on('ready', createWindow)
